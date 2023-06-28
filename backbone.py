@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from layers import GraphConvolution, GraphAttentionLayer, SpGraphAttentionLayer
-from torch_geometric.nn import GCNConv, SAGEConv
+from torch_geometric.nn import SAGEConv
 from utils import graph_top_K
 
 
@@ -24,6 +24,9 @@ class GCN(nn.Module):
             x = self.dropout_node(F.relu(x))
         x = self.conv_layers[-1](x, adj)
         return x
+
+
+"""Thanks to https://github.com/Diego999/pyGAT"""
 
 
 class GAT(nn.Module):
@@ -102,27 +105,6 @@ class GraphSAGE(nn.Module):
             x = self.dropout_node(F.relu(x))
         x = self.conv_layers[-1](x, edge_index)
         return x
-
-    # class GraphEncoder(nn.Module):
-
-
-#     def __init__(self, n_layers, in_features, hidden_features, embed_features, dropout, dropout_edge):
-#         super(GraphEncoder, self).__init__()
-#         self.dropout_node = nn.Dropout(dropout)
-#         self.dropout_adj = nn.Dropout(dropout_edge)
-
-#         self.encoder_layers = nn.ModuleList()
-#         self.encoder_layers.append(GraphConvolution(in_features, hidden_features))
-#         for _ in range(n_layers - 2):
-#             self.encoder_layers.append(GraphConvolution(hidden_features, hidden_features))
-#         self.encoder_layers.append(GraphConvolution(hidden_features, embed_features))
-
-#     def forward(self, x, adj):
-#         adj = self.dropout_adj(adj)
-#         for layer in self.encoder_layers[:-1]:
-#             x = self.dropout_node(F.relu(layer(x, adj)))
-#         x = self.encoder_layers[-1](x, adj)
-#         return x
 
 
 class GraphEncoder(nn.Module):

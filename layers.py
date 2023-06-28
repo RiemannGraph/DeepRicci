@@ -14,18 +14,7 @@ class GraphConvolution(nn.Module):
         return x
 
 
-class SparseDropout(nn.Module):
-    def __init__(self, prob=0.5):
-        super(SparseDropout, self).__init__()
-        self.prob = prob
-
-    def forward(self, x: torch.Tensor):
-        mask = (torch.rand(x._values().shape) + (1 - self.prob)).floor().bool()
-        idx = x._indices()[:, mask]
-        value = x._values()[mask] / (1 - self.prob)
-        return torch.sparse_coo_tensor(idx, value, x.shape)
-
-
+"""Thanks to https://github.com/Diego999/pyGAT"""
 class GraphAttentionLayer(nn.Module):
     """
     Simple GAT layer, similar to https://arxiv.org/abs/1710.10903
